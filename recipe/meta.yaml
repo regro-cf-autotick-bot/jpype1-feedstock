@@ -8,6 +8,8 @@ package:
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name.lower() }}-{{ version }}.tar.gz
   sha256: 2109138b7264f6360c717b887b6a4d20b29e997c516e8d7fa8756e40595bb537
+  patches:
+    - jni_opt.patch
 
 build:
   number: 0
@@ -21,6 +23,7 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ stdlib("c") }}
     - openjdk ==11
+    - ant
     - cmake
     - make  # [not win]
 
@@ -38,8 +41,10 @@ test:
     - jpype
   commands:
     - pip check
+    - python -c "import jpype; jpype.startJVM(); print(jpype.java.lang.String('hi there'));"
   requires:
     - pip
+    - openjdk
 
 about:
   home: https://github.com/jpype-project/jpype

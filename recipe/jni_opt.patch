@@ -1,0 +1,38 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e61c9bea..32a805e4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,9 +10,30 @@ set(CMAKE_CXX_STANDARD 14)
+ 
+ find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
+ find_package(Java REQUIRED COMPONENTS Development)
+-# todo: add fallback jni.h in case it aint found (no jdk required, or not found).
+-#set(JAVA_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/native/jni_include" ${JAVA_INCLUDE_PATH})
+-find_package(JNI REQUIRED)
++
++# 1. Remove 'REQUIRED' so CMake continues even if JNI is not found
++find_package(JNI)
++
++if(JNI_FOUND)
++    message(STATUS "System JNI found successfully.")
++else()
++    message(STATUS "System JNI not found. Falling back to bundled jni.h.")
++
++    # 2. Populate the standard variable that FindJNI usually sets
++    set(JNI_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/native/jni_include")
++
++    # 3. Create a mock JNI::JNI target
++    # This ensures that if your CMakeLists relies on modern target-based
++    # linking (e.g., target_link_libraries(my_ext PRIVATE JNI::JNI)),
++    # it won't break.
++    if(NOT TARGET JNI::JNI)
++        add_library(JNI::JNI INTERFACE IMPORTED)
++        set_target_properties(JNI::JNI PROPERTIES
++                INTERFACE_INCLUDE_DIRECTORIES "${JNI_INCLUDE_DIRS}"
++        )
++    endif()
++endif()
++
+ include(UseJava)
+ 
+ 
