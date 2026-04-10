@@ -20,15 +20,14 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ stdlib("c") }}
     - openjdk
+    - scikit-build-core
   host:
     - python
     - pip
     - setuptools
-    # - setupext unavailable
 
   run:
     - python
-    - typing_extensions  # [py<38]
     - packaging
 
 test:
