@@ -20,11 +20,11 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ stdlib("c") }}
     - openjdk
-    - scikit-build-core
   host:
     - python
     - pip
     - setuptools
+    - scikit-build-core
 
   run:
     - python
