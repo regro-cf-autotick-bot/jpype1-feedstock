@@ -17,12 +17,13 @@ requirements:
   build:
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+    - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - {{ stdlib("c") }}
     # todo: if we drag in jdk-25, older java versions would be unsupported. So consider using it as a runtime dep.
     #- openjdk
     - cmake
-    - ninja
+    - make  # [not win]
 
   host:
     - python
