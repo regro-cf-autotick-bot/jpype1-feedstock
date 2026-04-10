@@ -21,13 +21,13 @@ requirements:
     - {{ stdlib("c") }}
     # todo: if we drag in jdk-25, older java versions would be unsupported. So consider using it as a runtime dep.
     #- openjdk
+    - cmake
+    - ninja
+
   host:
     - python
     - pip
-    - setuptools
     - scikit-build-core
-    - cmake
-    - ninja
 
   run:
     - python
