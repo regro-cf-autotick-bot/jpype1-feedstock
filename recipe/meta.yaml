@@ -19,12 +19,14 @@ requirements:
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('cxx') }}
     - {{ stdlib("c") }}
-    - openjdk
+    # todo: if we drag in jdk-25, older java versions would be unsupported. So consider using it as a runtime dep.
+    #- openjdk
   host:
     - python
     - pip
     - setuptools
     - scikit-build-core
+    - cmake
 
   run:
     - python
