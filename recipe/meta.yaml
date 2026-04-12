@@ -25,6 +25,7 @@ requirements:
     - openjdk ==11
     - ant
     - cmake
+    - ninja # [win]
     - make  # [not win]
 
   host:
