@@ -1,16 +1,14 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index e61c9bea..32a805e4 100644
+index e61c9bea..4abe751f 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -10,9 +10,30 @@ set(CMAKE_CXX_STANDARD 14)
+@@ -10,9 +10,28 @@ set(CMAKE_CXX_STANDARD 14)
  
  find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
  find_package(Java REQUIRED COMPONENTS Development)
 -# todo: add fallback jni.h in case it aint found (no jdk required, or not found).
 -#set(JAVA_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/native/jni_include" ${JAVA_INCLUDE_PATH})
 -find_package(JNI REQUIRED)
-+
-+# 1. Remove 'REQUIRED' so CMake continues even if JNI is not found
 +find_package(JNI)
 +
 +if(JNI_FOUND)
@@ -36,3 +34,13 @@ index e61c9bea..32a805e4 100644
  include(UseJava)
  
  
+@@ -54,7 +73,8 @@ if(ENABLE_BUILD_JAR)
+             COMMENT "Copying ${JAR_OUTPUT} to internal destination"
+     )
+     add_custom_target(copy_jar ALL DEPENDS "${DEST_FILE}")
+-
++    # Explicitly link targets so MSBuild doesn't run them in parallel.
++    add_dependencies(copy_jar jpype_jar)
+     # finally install the jar to DEST_JAR, which makes it available for wheel building.
+     install(
+             FILES "${DEST_FILE}"
